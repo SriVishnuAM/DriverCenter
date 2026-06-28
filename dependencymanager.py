@@ -1,6 +1,11 @@
-import subprocess
+import json
 from runcommand import run_command
 class DependencyManager:
+
+    def __init__(self):       
+        with open("dependencies.json", "r") as file:
+            self.dependencies = json.load(file)
+
     def check(self,command):
         output = run_command(["which",command])
         if output:
@@ -8,10 +13,12 @@ class DependencyManager:
         else:
             return False
     
-    def ensure_commands(self,list):
+    def ensure_commands(self,commands):
         missing = []
-        for item in list:
+        for item in commands:
             if  not (self.check(item)):
                 missing.append(item)
-        print(missing)        
-            
+        return missing
+    
+    def get_package(self,command):
+        return self.dependencies[command]
