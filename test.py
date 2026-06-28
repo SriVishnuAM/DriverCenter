@@ -11,4 +11,5 @@ commands = [
 ]
 
 manger.ensure_commands(commands)
-print(manger.get_package("fastfsetch"))
+
+print(manger.dependencies)
