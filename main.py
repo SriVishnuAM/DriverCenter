@@ -29,9 +29,6 @@ def print_report():
     print("\n=== IP INFORMATION ===")
     print(data["ip_info"])
 
-    print("\n=== KERNEL ===")
-    print(data["kernel"])
-
     print("\n=== HOSTNAME ===")
     print(data["hostname"])
 
@@ -50,8 +47,8 @@ def print_report():
     print("\n=== GRAPHICS ===")
     print(data["graphics"])
 
-    print("\n=== INSTALLED PACKAGES ===")
-    print(data["installed_packages"])
+    print("\n=== LOADED MODULES ===")
+    print(data["loaded_modules"])
 
 
 def main():

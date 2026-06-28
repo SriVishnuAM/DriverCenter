@@ -21,8 +21,10 @@ def scan_hardware():
     pci_devices = subprocess.check_output(["lspci", "-k"], text=True)
     usb_devices = subprocess.check_output(["lsusb"], text=True)
     storage = subprocess.check_output(["lsblk", "-o", "NAME,SIZE,TYPE,MOUNTPOINT,FSTYPE"], text=True)
-    cpu = subprocess.check_output(["lscpu"], text=True)memory = subprocess.check_output(["free", "-h"], text=True)
-    network = subprocess.check_output(["ip", "addr"], text=True)hostname = subprocess.check_output(["hostname"], text=True).strip()
+    cpu = subprocess.check_output(["lscpu"], text=True)
+    memory = subprocess.check_output(["free", "-h"], text=True)
+    network = subprocess.check_output(["ip", "addr"], text=True)
+    hostname = subprocess.check_output(["hostname"], text=True).strip()
     os_info = subprocess.check_output(["cat", "/etc/os-release"], text=True)
     disk_usage = subprocess.check_output(["df", "-h"], text=True)
     loaded_modules = subprocess.check_output(["lsmod"], text=True)
@@ -34,6 +36,8 @@ def scan_hardware():
         "pci_devices": pci_devices,
         "usb_devices": usb_devices,
         "storage_devices": storage,
+        "memory": memory,
+        "hostname":hostname,
         "ip_info": network,
         "os_info":os_info ,
         "disk_usage": disk_usage,
