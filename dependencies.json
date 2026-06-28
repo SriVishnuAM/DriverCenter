@@ -2,5 +2,6 @@
     "lsusb": "usbutils",
     "lspci": "pciutils",
     "fastfetch": "fastfetch",
-    "lsblk": "util-linux"
+    "lsblk": "util-linux",
+    "sql": "postgresql"
 }

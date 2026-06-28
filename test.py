@@ -4,12 +4,15 @@ from dependencymanager import DependencyManager
 
 manger = DependencyManager()
 
-commands = [
+requirements= [
     "lsfusb",
     "lspci",
-    "fastfetch"
+    "fastfetch",
+    "sql",
+    "yum"
 ]
 
-manger.ensure_commands(commands)
 
-print(manger.dependencies)
+manger.resolve_dependencies(requirements)
+
+

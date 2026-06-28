@@ -1,6 +1,13 @@
 import subprocess
 import difflib
+import platform
 
+def os_info():
+    os = platform.freedesktop_os_release()["ID"]
+    if os in ["arch", "debian", "fedora"]:
+        return os
+    else:
+        return False
 
 def run_command(command):
     try:
@@ -17,7 +24,8 @@ def run_command(command):
 
 
 def scan_hardware():
-    system_info = subprocess.check_output(["fastfetch"], text=True)
+    
+    system_info = subprocess.run(["fastfetch","--logo", "small","--structure","os:kernel:host:cpu:memory:disk:display:localip:packages:shell"],text=True)
     pci_devices = subprocess.check_output(["lspci", "-k"], text=True)
     usb_devices = subprocess.check_output(["lsusb"], text=True)
     storage = subprocess.check_output(["lsblk", "-o", "NAME,SIZE,TYPE,MOUNTPOINT,FSTYPE"], text=True)
