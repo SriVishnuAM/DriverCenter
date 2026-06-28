@@ -5,13 +5,24 @@ class DependencyManager:
     def __init__(self):       
         with open("dependencies.json", "r") as file:
             self.dependencies = json.load(file)
+            self.cache = {}
 
     def command_exists(self,command):
-        output = run_command(["which",command])
-        if output:
-            return True
-        else:
-            return False
+            if command in self.cache:
+                if self.cache[command] == True:
+                    return True
+                else:
+                    return False
+            else:
+                output = run_command(["which",command])
+                if output:
+                    self.cache[command] = True
+                    return True
+                else:
+                    self.cache[command] = False
+                    return False
+
+                
     
     def ensure_commands(self,commands):
         missing = []

@@ -2,6 +2,5 @@
     "lsusb": "usbutils",
     "lspci": "pciutils",
     "fastfetch": "fastfetch",
-    "lsblk": "util-linux",
-    "curl" : "curl"
+    "lsblk": "util-linux"
 }
