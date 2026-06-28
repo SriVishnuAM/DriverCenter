@@ -1,21 +1,21 @@
 import argparse
-
+from colorama import Fore, Style, init
+import rich
+from rich.console import Console
+from dependencymanager import DependencyManager as manager
 from hardware import (
     scan_hardware,
     install_flow,
-    search_packages
+    search_packages,
+    os_info,
 )
 
 
-def print_report():
+""" def print_report():
     data = scan_hardware()
 
     
     print("DRIVER CENTER - HARDWARE REPORT")
-   
-
-    print("\n=== SYSTEM INFO ===")
-    print(data["system_info"])
 
     print("\n=== PCI DEVICES ===")
     print(data["pci_devices"])
@@ -28,9 +28,6 @@ def print_report():
 
     print("\n=== IP INFORMATION ===")
     print(data["ip_info"])
-
-    print("\n=== KERNEL ===")
-    print(data["kernel"])
 
     print("\n=== HOSTNAME ===")
     print(data["hostname"])
@@ -50,45 +47,24 @@ def print_report():
     print("\n=== GRAPHICS ===")
     print(data["graphics"])
 
-    print("\n=== INSTALLED PACKAGES ===")
-    print(data["installed_packages"])
-
+    print("\n=== LOADED MODULES ===")
+    print(data["loaded_modules"])
+"""
 
 def main():
-    parser = argparse.ArgumentParser(
-        prog="driver-center",
-        description="Driver Center CLI"
-    )
+    print("DRIVER MANAGER FOR LINUX")
+    init(autoreset=True)
+    #with Console().status("Checking dependencies..."):
+    #   missing = manager.ensure_commands(commands)
 
-    sub = parser.add_subparsers(dest="command")
-
-    sub.add_parser("scan")
-    sub.add_parser("install")
-
-    search = sub.add_parser("search")
-    search.add_argument("package")
-
-    args = parser.parse_args()
-
-    if args.command == "scan":
-        print_report()
-
-    elif args.command == "install":
-        install_flow()
-
-    elif args.command == "search":
-        packages = search_packages(args.package)
-
-        if packages:
-            print("\nMatching Packages:\n")
-            for pkg in packages:
-                print(pkg)
-        else:
-            print("No packages found.")
-
+    #Console.print("✓ Done!")
+    os = os_info()
+    if os == False:
+        print("Unsupported OS")
     else:
-        parser.print_help()
-
+        print(f"{Fore.RED}Your OS is based on {os_info()} distribution{Style.RESET_ALL}")
+    print("\n=== SYSTEM INFO ===")
+    print(scan_hardware()["system_info"])
 
 if __name__ == "__main__":
     main()

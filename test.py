@@ -4,7 +4,7 @@ from dependencymanager import DependencyManager
 
 manger = DependencyManager()
 
-commands = [
+requirements= [
     "lsfusb",
     "lspci",
     "fastfetch",
@@ -12,6 +12,6 @@ commands = [
     "sql"
 ]
 
-manger.resolve_dependencies(commands)
+manger.ensure_commands(commands)
 
-
+print(manger.dependencies)
