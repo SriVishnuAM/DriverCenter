@@ -3,5 +3,9 @@
     "lspci": "pciutils",
     "fastfetch": "fastfetch",
     "lsblk": "util-linux",
+<<<<<<< HEAD
     "sql": "postgresql"
+=======
+    "curl" : "curl"
+>>>>>>> refs/remotes/orgin/main
 }

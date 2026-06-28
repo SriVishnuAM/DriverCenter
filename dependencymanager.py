@@ -30,8 +30,10 @@ class DependencyManager:
         packages = []
         for item in commands:
             package = self.get_package(item)
-            if package:
+            if package!= None:
                 packages.append(package)
+            else:
+                print("Package not found for in dependencies.json:",item)
         return packages
 
     def install_package(self,package):
@@ -46,8 +48,10 @@ class DependencyManager:
 
     def resolve_dependencies(self,requirements):
         missing = self.ensure_commands(requirements)
-        if missing:
+        if missing != None:
             packages = self.get_packages(missing)
+            if not packages:
+                return
             print("The following packages are missing \n",packages,"install them all? (Y/N)")
             answer = input().lower().strip()
             while(True):
