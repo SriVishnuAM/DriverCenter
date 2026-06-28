@@ -4,12 +4,11 @@ from dependencymanager import DependencyManager
 
 manger = DependencyManager()
 
-def checker(command):
-    output =  manger.check(command)
-    if output:
-        print("Found")
-    else:
-        print("Not Found")
+commands = [
+    "lsfusb",
+    "lspci",
+    "fastfetch"
+]
 
-checker("lsusb")
+manger.ensure_commands(commands)
 
