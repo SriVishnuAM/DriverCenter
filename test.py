@@ -7,9 +7,11 @@ manger = DependencyManager()
 commands = [
     "lsfusb",
     "lspci",
-    "fastfetch"
+    "fastfetch",
+    "curl",
+    "sql"
 ]
 
-manger.ensure_commands(commands)
+manger.resolve_dependencies(commands)
 
-print(manger.dependencies)
+
