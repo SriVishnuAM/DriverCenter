@@ -8,21 +8,10 @@ requirements= [
     "lsfusb",
     "lspci",
     "fastfetch",
-<<<<<<< HEAD
-    "sql",
-    "yum"
-]
-
-
-manger.resolve_dependencies(requirements)
-
-
-=======
     "curl",
     "sql"
 ]
 
-manger.resolve_dependencies(commands)
+manger.ensure_commands(commands)
 
-
->>>>>>> refs/remotes/orgin/main
+print(manger.dependencies)
