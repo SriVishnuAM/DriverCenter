@@ -17,21 +17,30 @@ def run_command(command):
 
 
 def scan_hardware():
+    system_info = subprocess.check_output(["fastfetch"], text=True)
+    pci_devices = subprocess.check_output(["lspci", "-k"], text=True)
+    usb_devices = subprocess.check_output(["lsusb"], text=True)
+    storage = subprocess.check_output(["lsblk", "-o", "NAME,SIZE,TYPE,MOUNTPOINT,FSTYPE"], text=True)
+    cpu = subprocess.check_output(["lscpu"], text=True)memory = subprocess.check_output(["free", "-h"], text=True)
+    network = subprocess.check_output(["ip", "addr"], text=True)hostname = subprocess.check_output(["hostname"], text=True).strip()
+    os_info = subprocess.check_output(["cat", "/etc/os-release"], text=True)
+    disk_usage = subprocess.check_output(["df", "-h"], text=True)
+    loaded_modules = subprocess.check_output(["lsmod"], text=True)
+    audio_devices = subprocess.check_output(["aplay", "-l"], text=True)
+    graphics = subprocess.check_output(["lshw", "-c", "video"],text=True)
 
     return {
-        "system_info": run_command(["fastfetch"]),
-        "pci_devices": run_command(["lspci", "-k"]),
-        "usb_devices": run_command(["lsusb"]),
-        "storage_devices": run_command(["lsblk"]),
-        "ip_info": run_command(["ip", "addr"]),
-        "kernel": run_command(["uname", "-r"]),
-        "hostname": run_command(["hostname"]),
-        "os_info": run_command(["cat", "/etc/os-release"]),
-        "disk_usage": run_command(["df", "-h"]),
-        "loaded_modules": run_command(["lsmod"]),
-        "audio_devices": run_command(["aplay", "-l"]),
-        "graphics": run_command(["lshw", "-c", "video"]),
-        "installed_packages": run_command(["dpkg", "-l"])
+        "system_info": system_info,
+        "pci_devices": pci_devices,
+        "usb_devices": usb_devices,
+        "storage_devices": storage,
+        "ip_info": network,
+        "os_info":os_info ,
+        "disk_usage": disk_usage,
+        "loaded_modules":loaded_modules ,
+        "audio_devices": audio_devices,
+        "graphics": graphics,
+        
     }
 
 
