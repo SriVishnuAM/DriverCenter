@@ -1,5 +1,4 @@
 from rich.console import Console
-import pyfiglet
 from rich.progress import (
     Progress,
     TextColumn,
@@ -7,6 +6,8 @@ from rich.progress import (
     TaskProgressColumn,
     TimeElapsedColumn,
 )
+from rich.text import Text
+import pyfiglet
 
 from dependencymanager import DependencyManager
 from hardware import scan_hardware, os_info
@@ -14,11 +15,33 @@ from hardware import scan_hardware, os_info
 console = Console()
 
 
+def print_banner():
+    """Print application banner."""
+
+    terminal_width = console.size.width
+
+    banner = pyfiglet.figlet_format(
+        "Hades",
+        font="slant",
+        width=terminal_width,
+        justify="center",
+    )
+
+    console.print(banner, style="bold bright_red", overflow="ignore")
+
+    subtitle = Text(
+        "Linux Driver Manager",
+        style="bold cyan",
+        justify="center",
+    )
+    console.print(subtitle)
+
+    console.rule(style="bright_black")
+
+
 def main():
-    ascii_banner = pyfiglet.figlet_format("Hades")
-    ascii_banner1 = pyfiglet.figlet_format("Linux Driver Manager",font="small",width=500)
-    console.print(ascii_banner, style="bold bright_red")
-    console.print(ascii_banner1, style="bold white")
+    print_banner()
+
     manager = DependencyManager()
 
     requirements = [
@@ -28,43 +51,63 @@ def main():
         "curl",
         "python3",
         "python3-rich",
-        "python3-pyfiglet"
+        "python3-pyfiglet",
     ]
 
     with Progress(
-        TextColumn("[bold blue]{task.description}"),
-        BarColumn(bar_width=40),
+        TextColumn("[bold cyan]{task.description}"),
+        BarColumn(bar_width=None),
         TaskProgressColumn(),
         TimeElapsedColumn(),
         console=console,
     ) as progress:
 
-        task = progress.add_task("Checking dependencies...", total=100)
+        task = progress.add_task(
+            "Checking dependencies...",
+            total=100,
+        )
 
         missing = manager.ensure_commands(requirements)
+
         progress.update(task, completed=50)
 
-       
-        progress.update(task, description="Installing dependencies...")
-        manager.resolve_dependencies(missing)
+        if missing:
+            progress.update(
+                task,
+                description="Installing dependencies...",
+            )
+            manager.resolve_dependencies(missing)
 
-        progress.update(task, completed=100, description="Completed")
+        progress.update(
+            task,
+            completed=100,
+            description="Completed",
+        )
 
-    console.print("[bold green]✓ Dependency check completed.[/bold green]\n")
+    console.print()
+
+    console.print(
+        "[bold green]✓ Dependency check completed.[/bold green]"
+    )
 
     distro = os_info()
 
     if not distro:
-        console.print("[bold red]Unsupported OS[/bold red]")
+        console.print("[bold red]Unsupported Linux distribution.[/bold red]")
         return
 
     console.print(
-        f"[bold green]Detected Distribution:[/bold green] [cyan]{distro}[/cyan]\n"
+        f"[bold green]Detected Distribution:[/bold green] [cyan]{distro}[/cyan]"
     )
+
+    console.print()
 
     console.rule("[bold yellow]System Information[/bold yellow]")
 
     system = scan_hardware()
-    console.print(system["system_info"])
+
+    console.print(system["system_info"],width=500)
+
+
 if __name__ == "__main__":
     main()
