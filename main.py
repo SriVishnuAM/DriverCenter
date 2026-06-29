@@ -1,4 +1,5 @@
 from rich.console import Console
+import pyfiglet
 from rich.progress import (
     Progress,
     TextColumn,
@@ -14,8 +15,8 @@ console = Console()
 
 
 def main():
-    console.print("[bold cyan]Driver Manager for Linux[/bold cyan]\n")
-
+    ascii_banner = pyfiglet.figlet_format("DRIVER MANAGER FOR LINUX",font= "small",width=500)
+    console.print(ascii_banner, style="bold bright_red on black")
     manager = DependencyManager()
 
     requirements = [
@@ -36,15 +37,13 @@ def main():
 
         task = progress.add_task("Checking dependencies...", total=100)
 
-        # Check dependencies
         missing = manager.ensure_commands(requirements)
         progress.update(task, completed=50)
 
-        # Install missing packages
+       
         progress.update(task, description="Installing dependencies...")
         manager.resolve_dependencies(missing)
 
-        # Finish
         progress.update(task, completed=100, description="Completed")
 
     console.print("[bold green]✓ Dependency check completed.[/bold green]\n")
