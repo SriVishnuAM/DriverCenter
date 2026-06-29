@@ -22,8 +22,6 @@ class DependencyManager:
                 else:
                     self.cache[command] = False
                     return False
-
-                
     
     def ensure_commands(self,commands):
         missing = []
