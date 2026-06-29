@@ -1,70 +1,69 @@
-import argparse
-from colorama import Fore, Style, init
-import rich
 from rich.console import Console
-from dependencymanager import DependencyManager as manager
-from hardware import (
-    scan_hardware,
-    install_flow,
-    search_packages,
-    os_info,
+from rich.progress import (
+    Progress,
+    TextColumn,
+    BarColumn,
+    TaskProgressColumn,
+    TimeElapsedColumn,
 )
 
+from dependencymanager import DependencyManager
+from hardware import scan_hardware, os_info
 
-""" def print_report():
-    data = scan_hardware()
+console = Console()
 
-    
-    print("DRIVER CENTER - HARDWARE REPORT")
-
-    print("\n=== PCI DEVICES ===")
-    print(data["pci_devices"])
-
-    print("\n=== USB DEVICES ===")
-    print(data["usb_devices"])
-
-    print("\n=== STORAGE DEVICES ===")
-    print(data["storage_devices"])
-
-    print("\n=== IP INFORMATION ===")
-    print(data["ip_info"])
-
-    print("\n=== HOSTNAME ===")
-    print(data["hostname"])
-
-    print("\n=== OS INFORMATION ===")
-    print(data["os_info"])
-
-    print("\n=== DISK USAGE ===")
-    print(data["disk_usage"])
-
-    print("\n=== LOADED MODULES ===")
-    print(data["loaded_modules"])
-
-    print("\n=== AUDIO DEVICES ===")
-    print(data["audio_devices"])
-
-    print("\n=== GRAPHICS ===")
-    print(data["graphics"])
-
-    print("\n=== LOADED MODULES ===")
-    print(data["loaded_modules"])
-"""
 
 def main():
-    print("DRIVER MANAGER FOR LINUX")
-    init(autoreset=True)
-    #with Console().status("Checking dependencies..."):
-    #   missing = manager.ensure_commands(commands)
+    console.print("[bold cyan]Driver Manager for Linux[/bold cyan]\n")
 
-    #Console.print("✓ Done!")
-    os = os_info()
-    if os == False:
-        print("Unsupported OS")
-    else:
-        print(f"{Fore.RED}Your OS is based on {os_info()} distribution{Style.RESET_ALL}")
-    print("\n=== SYSTEM INFO ===")
-    print(scan_hardware()["system_info"])
+    manager = DependencyManager()
+
+    requirements = [
+        "lsusb",
+        "lspci",
+        "fastfetch",
+        "curl",
+        "libapache2-mod-wsgi-py3",
+    ]
+
+    with Progress(
+        TextColumn("[bold blue]{task.description}"),
+        BarColumn(bar_width=40),
+        TaskProgressColumn(),
+        TimeElapsedColumn(),
+        console=console,
+    ) as progress:
+
+        task = progress.add_task("Checking dependencies...", total=100)
+
+        # Check dependencies
+        missing = manager.ensure_commands(requirements)
+        progress.update(task, completed=50)
+
+        # Install missing packages
+        progress.update(task, description="Installing dependencies...")
+        manager.resolve_dependencies(missing)
+
+        # Finish
+        progress.update(task, completed=100, description="Completed")
+
+    console.print("[bold green]✓ Dependency check completed.[/bold green]\n")
+
+    distro = os_info()
+
+    if not distro:
+        console.print("[bold red]Unsupported OS[/bold red]")
+        return
+
+    console.print(
+        f"[bold green]Detected Distribution:[/bold green] [cyan]{distro}[/cyan]\n"
+    )
+
+    console.rule("[bold yellow]System Information[/bold yellow]")
+
+    system = scan_hardware()
+    console.print(system["system_info"])
+
 
 if __name__ == "__main__":
     main()

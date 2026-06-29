@@ -4,7 +4,7 @@ import platform
 
 def os_info():
     os = platform.freedesktop_os_release()["ID"]
-    if os in ["arch", "debian", "fedora"]:
+    if os in ["arch", "debian", "fedora","ubuntu"]:
         return os
     else:
         return False
