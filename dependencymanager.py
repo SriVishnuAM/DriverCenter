@@ -1,3 +1,4 @@
+import subprocess
 import json
 from runcommand import run_command
 class DependencyManager:
@@ -36,7 +37,14 @@ class DependencyManager:
             return self.dependencies[command]
         except KeyError:
             return None
-    
+        
+    def get_command(self,package):
+        found_key = None
+        for key, val in  self.dependencies.items():
+            if val == package:
+                return key # Stop searching immediately
+        return None # FallBack
+
     def get_packages(self,commands):
         packages = []
         for item in commands:
@@ -49,9 +57,15 @@ class DependencyManager:
 
     def install_package(self,package):
         try:
-            run_command(["sudo", "apt" ,"install",package])
+            subprocess.run(["sudo", "apt" ,"install","-y",package])
+            command = self.get_command(package)
+            if command:
+                self.cache[command] = True
         except:
             print("Error occured while trying to install",package)
+            command = self.get_command(package)
+            if command:
+                self.cache[command] = False
     
     def install_packages(self,packages):
         for item in packages:
@@ -59,9 +73,10 @@ class DependencyManager:
 
     def resolve_dependencies(self,requirements):
         missing = self.ensure_commands(requirements)
-        if missing != None:
+        if missing == [] :
             packages = self.get_packages(missing)
-            if not packages:
+            if packages is not None:
+                print("No package found to be install.")
                 return
             print("The following packages are missing \n",packages,"install them all? (Y/N)")
             answer = input().lower().strip()
@@ -74,6 +89,13 @@ class DependencyManager:
                 else:
                     print("Please Enter Either Y or N")
                     answer = input().lower().strip()
+        else:
+            print("All Packages and Commands are Present")
+
+    def refresh_cache(self):
+        self.cache.clear()
+
+        
 
 
 

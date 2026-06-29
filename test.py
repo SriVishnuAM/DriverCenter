@@ -12,6 +12,6 @@ requirements= [
     "sql"
 ]
 
-manger.ensure_commands(commands)
+manger.ensure_commands(requirements)
 
 print(manger.dependencies)
