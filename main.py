@@ -15,8 +15,10 @@ console = Console()
 
 
 def main():
-    ascii_banner = pyfiglet.figlet_format("DRIVER MANAGER FOR LINUX",font= "small",width=500)
-    console.print(ascii_banner, style="bold bright_red on black")
+    ascii_banner = pyfiglet.figlet_format("Hades")
+    ascii_banner1 = pyfiglet.figlet_format("Linux Driver Manager",font="small",width=500)
+    console.print(ascii_banner, style="bold bright_red")
+    console.print(ascii_banner1, style="bold white")
     manager = DependencyManager()
 
     requirements = [
@@ -24,7 +26,9 @@ def main():
         "lspci",
         "fastfetch",
         "curl",
-        "libapache2-mod-wsgi-py3",
+        "python3",
+        "python3-rich",
+        "python3-pyfiglet"
     ]
 
     with Progress(
@@ -62,7 +66,5 @@ def main():
 
     system = scan_hardware()
     console.print(system["system_info"])
-
-
 if __name__ == "__main__":
     main()
