@@ -44,16 +44,26 @@ def main():
 
     manager = DependencyManager()
 
-    requirements = [
-        "lsusb",
-        "lspci",
-        "fastfetch",
-        "curl",
-        "python3",
-        "python3-rich",
-        "python3-pyfiglet",
+    requirements_hardware = [
+    "fastfetch",
+    "lspci",
+    "lsusb",
+    "lsblk",
+    "lscpu",
+    "free",
+    "ip",
+    "hostname",
+    "df",
+    "lsmod",
+    "aplay",
+    "lshw",
+    "curl",
+    "python3",
     ]
-
+    requirements_python = [
+    "rich",
+    "pyfiglet",
+    ]
     with Progress(
         TextColumn("[bold cyan]{task.description}"),
         BarColumn(bar_width=None),
@@ -67,7 +77,7 @@ def main():
             total=100,
         )
 
-        missing = manager.ensure_commands(requirements)
+        missing = manager.ensure_commands(requirements_hardware)
 
         progress.update(task, completed=50)
 
