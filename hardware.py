@@ -52,6 +52,7 @@ def scan_hardware():
         "loaded_modules":loaded_modules ,
         "audio_devices": audio_devices,
         "graphics": graphics,
+        "cpu":cpu
         
     }
 
